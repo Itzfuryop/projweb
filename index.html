@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickSupply - Instant Project & Study Essentials Delivery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <p>Loading QuickSupply...</p>                                                                                                                                                                                                                                                            
+    </div>
+
+    <!-- Mobile Onboarding Screen -->
+    <div id="onboardingScreen" class="onboarding-screen hidden">
+        <div class="onboarding-content">
+            <button class="skip-btn" onclick="skipOnboarding()">Skip</button>
+            <div class="onboarding-slide active" data-slide="0">
+                <div class="onboarding-icon">🚀</div>
+                <h2>Lightning Fast Delivery</h2>
+                <p>Get your project supplies delivered in under 30 minutes!</p>
+            </div>
+            <div class="onboarding-slide" data-slide="1">
+                <div class="onboarding-icon">📦</div>
+                <h2>Everything You Need</h2>
+                <p>From project kits to emergency essentials - we've got it all</p>
+            </div>
+            <div class="onboarding-slide" data-slide="2">
+                <div class="onboarding-icon">💰</div>
+                <h2>Best Prices</h2>
+                <p>Quality supplies at student-friendly prices</p>
+            </div>
+            <div class="onboarding-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+                <span class="dot" onclick="goToSlide(2)"></span>
+            </div>
+            <button class="onboarding-btn" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Offline Mode Popup -->
+    <div id="offlinePopup" class="offline-popup hidden">
+        <div class="offline-content">
+            <span class="offline-icon">📡</span>
+            <p>You're currently offline. Some features may be limited.</p>
+            <button onclick="closeOfflinePopup()">Got it</button>
+        </div>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="menu-btn" id="menuBtn">☰</button>
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">QuickSupply</span>
+                </a>
+            </div>
+            <div class="nav-center">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for project kits, supplies, essentials...">
+                    <button class="search-btn" onclick="performSearch()">🔍</button>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="nav-icon" id="wishlistBtn" onclick="goToWishlist()">
+                    <span class="icon">❤️</span>
+                    <span class="badge" id="wishlistCount">0</span>
+                </button>
+                <button class="nav-icon" id="cartBtn" onclick="goToCart()">
+                    <span class="icon">🛒</span>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+                <button class="nav-icon" id="userBtn" onclick="toggleUserMenu()">
+                    <span class="icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Dropdown Menu -->
+    <div id="userMenu" class="user-menu hidden">
+        <div class="user-menu-content">
+            <div id="userInfo" class="user-info"></div>
+            <a href="pages/orders.html" class="menu-item">📦 My Orders</a>
+            <a href="pages/wishlist.html" class="menu-item">❤️ Wishlist</a>
+            <a href="#" onclick="handleAuth()" class="menu-item" id="authBtn">🔐 Login</a>
+        </div>
+    </div>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu">
+        <div class="side-menu-header">
+            <h3>Categories</h3>
+            <button class="close-btn" onclick="closeSideMenu()">✕</button>
+        </div>
+        <div class="side-menu-content">
+            <a href="pages/category.html?cat=project-kits" class="menu-link">
+                <span class="menu-icon">🔧</span>
+                <span>Project Kits</span>
+            </a>
+            <a href="pages/category.html?cat=project-items" class="menu-link">
+                <span class="menu-icon">🔩</span>
+                <span>Project Items</span>
+            </a>
+            <a href="pages/category.html?cat=prints" class="menu-link">
+                <span class="menu-icon">🖨️</span>
+                <span>Printouts</span>
+            </a>
+            <a href="pages/category.html?cat=essentials" class="menu-link">
+                <span class="menu-icon">🎒</span>
+                <span>Emergency Essentials</span>
+            </a>
+            <a href="pages/category.html?cat=study" class="menu-link">
+                <span class="menu-icon">📚</span>
+                <span>Study Supplies</span>
+            </a>
+            <hr>
+            <a href="pages/about.html" class="menu-link">
+                <span class="menu-icon">ℹ️</span>
+                <span>About Us</span>
+            </a>
+            <a href="pages/contact.html" class="menu-link">
+                <span class="menu-icon">📞</span>
+                <span>Contact</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Get Your Supplies in <span class="highlight">30 Minutes</span></h1>
+            <p class="hero-subtitle">Project Kits • Printouts • Emergency Essentials • Study Supplies</p>
+            <button class="hero-btn" onclick="exploreProducts()">Explore Now</button>
+        </div>
+        <div class="hero-features">
+            <div class="feature-badge">
+                <span class="feature-icon">⚡</span>
+                <span class="feature-text">30-min delivery</span>
+            </div>
+            <div class="feature-badge">
+                <span class="feature-icon">💯</span>
+                <span class="feature-text">Quality assured</span>
+            </div>
+            <div class="feature-badge">
+                <span class="feature-icon">💰</span>
+                <span class="feature-text">Best prices</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Slider -->
+    <section class="categories-section">
+        <div class="section-header">
+            <h2>Shop by Category</h2>
+        </div>
+        <div class="categories-slider">
+            <div class="category-card" onclick="navigateToCategory('project-kits')">
+                <div class="category-icon">🔧</div>
+                <h3>Project Kits</h3>
+                <p>Complete DIY kits</p>
+            </div>
+            <div class="category-card" onclick="navigateToCategory('project-items')">
+                <div class="category-icon">🔩</div>
+                <h3>Project Items</h3>
+                <p>Individual components</p>
+            </div>
+            <div class="category-card" onclick="navigateToCategory('prints')">
+                <div class="category-icon">🖨️</div>
+                <h3>Printouts</h3>
+                <p>Fast printing service</p>
+            </div>
+            <div class="category-card" onclick="navigateToCategory('essentials')">
+                <div class="category-icon">🎒</div>
+                <h3>Essentials</h3>
+                <p>Emergency supplies</p>
+            </div>
+            <div class="category-card" onclick="navigateToCategory('study')">
+                <div class="category-icon">📚</div>
+                <h3>Study Supplies</h3>
+                <p>Books & stationery</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offers Banner -->
+    <section class="offers-banner">
+        <div class="offer-card">
+            <div class="offer-badge">🎉 LIMITED OFFER</div>
+            <h3>Flat ₹50 OFF on first order</h3>
+            <p>Use code: <strong>FIRST50</strong></p>
+        </div>
+    </section>
+
+    <!-- Popular Project Kits -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Popular Project Kits</h2>
+            <a href="pages/category.html?cat=project-kits" class="view-all">View All →</a>
+        </div>
+        <div class="products-grid" id="projectKitsGrid"></div>
+    </section>
+
+    <!-- Emergency Essentials -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Emergency Essentials</h2>
+            <a href="pages/category.html?cat=essentials" class="view-all">View All →</a>
+        </div>
+        <div class="products-grid" id="essentialsGrid"></div>
+    </section>
+
+    <!-- Recommended Items -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Recommended for You</h2>
+        </div>
+        <div class="products-grid" id="recommendedGrid"></div>
+    </section>
+
+    <!-- Recently Viewed -->
+    <section class="products-section" id="recentlyViewedSection" style="display: none;">
+        <div class="section-header">
+            <h2>Recently Viewed</h2>
+        </div>
+        <div class="products-grid" id="recentlyViewedGrid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickSupply</h3>
+                <p>Your one-stop shop for instant project supplies and study essentials delivery.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="pages/about.html">About Us</a>
+                <a href="pages/contact.html">Contact</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <a href="pages/category.html?cat=project-kits">Project Kits</a>
+                <a href="pages/category.html?cat=prints">Printouts</a>
+                <a href="pages/category.html?cat=essentials">Essentials</a>
+                <a href="pages/category.html?cat=study">Study Supplies</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>📧 support@quicksupply.com</p>
+                <p>📞 +91 98765 43210</p>
+                <p>⏰ 24/7 Support</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 QuickSupply. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="pages/category.html?cat=all" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🔍</span>
+            <span class="bottom-nav-label">Browse</span>
+        </a>
+        <a href="pages/cart.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Cart</span>
+            <span class="bottom-nav-badge" id="bottomCartCount">0</span>
+        </a>
+        <a href="pages/orders.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">📦</span>
+            <span class="bottom-nav-label">Orders</span>
+        </a>
+        <a href="pages/profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👤</span>
+            <span class="bottom-nav-label">Profile</span>
+        </a>
+    </div>
+
+    <script src="scripts/data.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
