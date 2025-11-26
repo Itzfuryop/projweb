@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - QuickSupply</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .confirmation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 6rem;
+            animation: scaleIn 0.5s ease;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confirmation-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .order-id {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success-color);
+            margin: var(--spacing-md) 0;
+        }
+
+        .delivery-info {
+            background: rgba(102, 126, 234, 0.1);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-xl);
+        }
+
+        .btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: var(--transition-normal);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">QuickSupply</span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <button class="nav-icon" id="userBtn" onclick="toggleUserMenu()">
+                    <span class="icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="confirmation-container">
+        <div class="success-icon">✅</div>
+        <h1 style="font-size: 2.5rem; margin-bottom: var(--spacing-sm);">Order Confirmed!</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: var(--spacing-lg);">
+            Thank you for your order. We'll deliver it super fast!
+        </p>
+
+        <div class="confirmation-card">
+            <div class="order-id" id="orderIdDisplay">Order #LOADING...</div>
+            
+            <div class="delivery-info">
+                <h3 style="margin-bottom: var(--spacing-md);">📦 Delivery Details</h3>
+                <div id="orderDetails"></div>
+            </div>
+
+            <div style="background: rgba(0, 212, 170, 0.1); padding: var(--spacing-md); border-radius: var(--radius-md); margin-top: var(--spacing-md);">
+                <div style="font-size: 2rem; margin-bottom: var(--spacing-xs);">⚡</div>
+                <div style="font-weight: 600; margin-bottom: var(--spacing-xs);">Estimated Delivery</div>
+                <div id="deliveryTime" style="color: var(--success-color); font-size: 1.2rem; font-weight: 700;">Loading...</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="orders.html" class="btn btn-primary">Track Order</a>
+            <a href="../index.html" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+
+        <p style="color: var(--text-secondary); margin-top: var(--spacing-xl); font-size: 0.9rem;">
+            Order confirmation has been sent to your email
+        </p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickSupply</h3>
+                <p>Your one-stop shop for instant project supplies and study essentials delivery.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>📧 support@quicksupply.com</p>
+                <p>📞 +91 98765 43210</p>
+                <p>⏰ 24/7 Support</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 QuickSupply. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../scripts/data.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+
+            loadOrderDetails();
+        });
+
+        function loadOrderDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+
+            if (!orderId) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            const order = getOrderById(orderId);
+            if (!order) {
+                window.location.href = 'orders.html';
+                return;
+            }
+
+            document.getElementById('orderIdDisplay').textContent = `Order #${order.id}`;
+            document.getElementById('deliveryTime').textContent = order.estimatedDelivery;
+
+            const detailsHTML = `
+                <div class="info-row">
+                    <span style="color: var(--text-secondary);">Items</span>
+                    <span style="font-weight: 600;">${order.items.length} items</span>
+                </div>
+                <div class="info-row">
+                    <span style="color: var(--text-secondary);">Total Amount</span>
+                    <span style="font-weight: 700; color: var(--success-color);">${formatCurrency(order.total)}</span>
+                </div>
+                <div class="info-row">
+                    <span style="color: var(--text-secondary);">Payment Method</span>
+                    <span style="font-weight: 600;">${order.payment === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</span>
+                </div>
+                <div class="info-row">
+                    <span style="color: var(--text-secondary);">Delivery Address</span>
+                    <span style="font-weight: 600; text-align: right;">${order.address.name}<br>${order.address.street}, ${order.address.city} - ${order.address.pincode}</span>
+                </div>
+            `;
+
+            document.getElementById('orderDetails').innerHTML = detailsHTML;
+        }
+
+        function toggleUserMenu() {
+            window.location.href = 'profile.html';
+        }
+    </script>
+</body>
+</html>

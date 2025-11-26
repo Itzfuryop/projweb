@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Products - QuickSupply</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <p>Loading Products...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="menu-btn" id="menuBtn">☰</button>
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">QuickSupply</span>
+                </a>
+            </div>
+            <div class="nav-center">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for project kits, supplies, essentials...">
+                    <button class="search-btn" onclick="performSearch()">🔍</button>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="nav-icon" id="wishlistBtn" onclick="goToWishlist()">
+                    <span class="icon">❤️</span>
+                    <span class="badge" id="wishlistCount">0</span>
+                </button>
+                <button class="nav-icon" id="cartBtn" onclick="goToCart()">
+                    <span class="icon">🛒</span>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+                <button class="nav-icon" id="userBtn" onclick="toggleUserMenu()">
+                    <span class="icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Dropdown Menu -->
+    <div id="userMenu" class="user-menu hidden">
+        <div class="user-menu-content">
+            <div id="userInfo" class="user-info"></div>
+            <a href="orders.html" class="menu-item">📦 My Orders</a>
+            <a href="wishlist.html" class="menu-item">❤️ Wishlist</a>
+            <a href="#" onclick="handleAuth()" class="menu-item" id="authBtn">🔐 Login</a>
+        </div>
+    </div>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu">
+        <div class="side-menu-header">
+            <h3>Categories</h3>
+            <button class="close-btn" onclick="closeSideMenu()">✕</button>
+        </div>
+        <div class="side-menu-content">
+            <a href="category.html?cat=project-kits" class="menu-link">
+                <span class="menu-icon">🔧</span>
+                <span>Project Kits</span>
+            </a>
+            <a href="category.html?cat=project-items" class="menu-link">
+                <span class="menu-icon">🔩</span>
+                <span>Project Items</span>
+            </a>
+            <a href="category.html?cat=prints" class="menu-link">
+                <span class="menu-icon">🖨️</span>
+                <span>Printouts</span>
+            </a>
+            <a href="category.html?cat=essentials" class="menu-link">
+                <span class="menu-icon">🎒</span>
+                <span>Emergency Essentials</span>
+            </a>
+            <a href="category.html?cat=study" class="menu-link">
+                <span class="menu-icon">📚</span>
+                <span>Study Supplies</span>
+            </a>
+            <hr>
+            <a href="about.html" class="menu-link">
+                <span class="menu-icon">ℹ️</span>
+                <span>About Us</span>
+            </a>
+            <a href="contact.html" class="menu-link">
+                <span class="menu-icon">📞</span>
+                <span>Contact</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-lg) var(--spacing-md); min-height: 60vh;">
+        <!-- Page Header -->
+        <div style="margin-bottom: var(--spacing-lg);">
+            <h1 id="pageTitle" style="font-size: 2rem; margin-bottom: var(--spacing-sm);">All Products</h1>
+            <p id="pageSubtitle" style="color: var(--text-secondary);">Browse our complete collection</p>
+        </div>
+
+        <!-- Filters & Sort -->
+        <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); flex-wrap: wrap; align-items: center;">
+            <select id="sortSelect" onchange="applySorting()" style="padding: var(--spacing-sm) var(--spacing-md); background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--primary-color); border-radius: var(--radius-md); font-size: 0.95rem; cursor: pointer;">
+                <option value="default">Sort by: Relevance</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="name">Name: A to Z</option>
+                <option value="rating">Rating: High to Low</option>
+            </select>
+            
+            <div style="flex: 1;"></div>
+            
+            <span id="productCount" style="color: var(--text-secondary); font-size: 0.9rem;">Loading products...</span>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden" style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+            <div style="font-size: 4rem; margin-bottom: var(--spacing-md);">📦</div>
+            <h2 style="margin-bottom: var(--spacing-sm);">No products found</h2>
+            <p>Try adjusting your filters or search terms</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickSupply</h3>
+                <p>Your one-stop shop for instant project supplies and study essentials delivery.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <a href="category.html?cat=project-kits">Project Kits</a>
+                <a href="category.html?cat=prints">Printouts</a>
+                <a href="category.html?cat=essentials">Essentials</a>
+                <a href="category.html?cat=study">Study Supplies</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>📧 support@quicksupply.com</p>
+                <p>📞 +91 98765 43210</p>
+                <p>⏰ 24/7 Support</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 QuickSupply. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="../index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="category.html?cat=all" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">🔍</span>
+            <span class="bottom-nav-label">Browse</span>
+        </a>
+        <a href="cart.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Cart</span>
+            <span class="bottom-nav-badge" id="bottomCartCount">0</span>
+        </a>
+        <a href="orders.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">📦</span>
+            <span class="bottom-nav-label">Orders</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👤</span>
+            <span class="bottom-nav-label">Profile</span>
+        </a>
+    </div>
+
+    <script src="../scripts/data.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        // Category page specific code
+        let currentProducts = [];
+        let currentSort = 'default';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+
+            updateCartCount();
+            updateWishlistCount();
+            updateUserInfo();
+            loadCategoryProducts();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const menuBtn = document.getElementById('menuBtn');
+            if (menuBtn) menuBtn.addEventListener('click', toggleSideMenu);
+
+            const userBtn = document.getElementById('userBtn');
+            if (userBtn) userBtn.addEventListener('click', toggleUserMenu);
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') performSearch();
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                const sideMenu = document.getElementById('sideMenu');
+                const userMenu = document.getElementById('userMenu');
+                const menuBtn = document.getElementById('menuBtn');
+                const userBtn = document.getElementById('userBtn');
+
+                if (sideMenu && !sideMenu.contains(e.target) && e.target !== menuBtn) {
+                    sideMenu.classList.remove('active');
+                }
+
+                if (userMenu && !userMenu.contains(e.target) && e.target !== userBtn) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+        }
+
+        function loadCategoryProducts() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('cat');
+            const searchQuery = urlParams.get('search');
+
+            const allProducts = JSON.parse(localStorage.getItem('products'));
+            
+            if (searchQuery) {
+                currentProducts = searchProducts(searchQuery);
+                document.getElementById('pageTitle').textContent = `Search Results for "${searchQuery}"`;
+                document.getElementById('pageSubtitle').textContent = `${currentProducts.length} products found`;
+            } else if (category && category !== 'all') {
+                currentProducts = filterByCategory(category);
+                const categoryNames = {
+                    'project-kits': 'Project Kits',
+                    'project-items': 'Project Items',
+                    'prints': 'Printouts',
+                    'essentials': 'Emergency Essentials',
+                    'study': 'Study Supplies'
+                };
+                document.getElementById('pageTitle').textContent = categoryNames[category] || 'Products';
+                document.getElementById('pageSubtitle').textContent = `${currentProducts.length} products available`;
+            } else {
+                currentProducts = allProducts;
+                document.getElementById('pageTitle').textContent = 'All Products';
+                document.getElementById('pageSubtitle').textContent = `${currentProducts.length} products available`;
+            }
+
+            displayProducts();
+        }
+
+        function displayProducts() {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const productCount = document.getElementById('productCount');
+
+            if (currentProducts.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                productCount.textContent = '0 products';
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            productCount.textContent = `${currentProducts.length} product${currentProducts.length !== 1 ? 's' : ''}`;
+
+            grid.innerHTML = currentProducts.map(product => {
+                const isWishlisted = isInWishlist(product.id);
+                return `
+                    <div class="product-card" onclick="viewProduct(${product.id})">
+                        ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                        <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" 
+                                onclick="event.stopPropagation(); handleWishlist(${product.id})">
+                            ${isWishlisted ? '❤️' : '🤍'}
+                        </button>
+                        <div class="product-image">${product.image}</div>
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-footer">
+                                <span class="product-price">${formatCurrency(product.price)}</span>
+                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function applySorting() {
+            const sortSelect = document.getElementById('sortSelect');
+            currentSort = sortSelect.value;
+            currentProducts = sortProducts(currentProducts, currentSort);
+            displayProducts();
+        }
+
+        function viewProduct(productId) {
+            addToRecentlyViewed(productId);
+            window.location.href = `product.html?id=${productId}`;
+        }
+
+        function handleWishlist(productId) {
+            const isAdded = toggleWishlist(productId);
+            const wishlistBtns = document.querySelectorAll(`[onclick*="handleWishlist(${productId})"]`);
+            wishlistBtns.forEach(btn => {
+                btn.textContent = isAdded ? '❤️' : '🤍';
+                if (isAdded) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function toggleSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            if (sideMenu) sideMenu.classList.toggle('active');
+        }
+
+        function closeSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            if (sideMenu) sideMenu.classList.remove('active');
+        }
+
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) userMenu.classList.toggle('hidden');
+        }
+
+        function goToCart() {
+            window.location.href = 'cart.html';
+        }
+
+        function goToWishlist() {
+            window.location.href = 'wishlist.html';
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+
+            const query = searchInput.value.trim();
+            if (query.length === 0) {
+                showNotification('Please enter a search term', 'error');
+                return;
+            }
+
+            window.location.href = `category.html?search=${encodeURIComponent(query)}`;
+        }
+
+        function handleAuth() {
+            const user = getCurrentUser();
+            if (user) {
+                logoutUser();
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

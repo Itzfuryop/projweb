@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - QuickSupply</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .wishlist-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-lg) var(--spacing-md);
+        }
+
+        .page-header {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .empty-state h3 {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .empty-state .btn {
+            padding: var(--spacing-sm) var(--spacing-xl);
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition-normal);
+        }
+
+        .empty-state .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        @media (max-width: 768px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-sm);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <p>Loading Wishlist...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">QuickSupply</span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <button class="nav-icon" onclick="window.location.href='cart.html'">
+                    <span class="icon">🛒</span>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+                <button class="nav-icon" onclick="window.location.href='profile.html'">
+                    <span class="icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="wishlist-container">
+        <div class="page-header">
+            <h1 class="page-title">My Wishlist</h1>
+            <p class="page-subtitle">Save items for later</p>
+        </div>
+
+        <div id="wishlistContent"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickSupply</h3>
+                <p>Your one-stop shop for instant project supplies and study essentials delivery.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>📧 support@quicksupply.com</p>
+                <p>📞 +91 98765 43210</p>
+                <p>⏰ 24/7 Support</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 QuickSupply. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="../index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="category.html?cat=all" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🔍</span>
+            <span class="bottom-nav-label">Browse</span>
+        </a>
+        <a href="cart.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Cart</span>
+            <span class="bottom-nav-badge" id="bottomCartCount">0</span>
+        </a>
+        <a href="orders.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">📦</span>
+            <span class="bottom-nav-label">Orders</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👤</span>
+            <span class="bottom-nav-label">Profile</span>
+        </a>
+    </div>
+
+    <script src="../scripts/data.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+
+            updateCartCount();
+            updateWishlistCount();
+            loadWishlist();
+        });
+
+        function loadWishlist() {
+            const wishlistIds = getWishlistItems();
+            const container = document.getElementById('wishlistContent');
+
+            if (wishlistIds.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">❤️</div>
+                        <h3>Your Wishlist is Empty</h3>
+                        <p>Add items you love to your wishlist</p>
+                        <a href="../index.html" class="btn">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const products = JSON.parse(localStorage.getItem('products'));
+            const wishlistProducts = wishlistIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+
+            const productsHTML = wishlistProducts.map(product => createProductCard(product)).join('');
+            container.innerHTML = `<div class="wishlist-grid">${productsHTML}</div>`;
+        }
+
+        function createProductCard(product) {
+            return `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">${product.image}</div>
+                    <button class="wishlist-btn active" onclick="event.stopPropagation(); removeFromWishlistUI(${product.id})">
+                        ❤️
+                    </button>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-footer">
+                            <div class="product-price">${formatCurrency(product.price)}</div>
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function removeFromWishlistUI(productId) {
+            toggleWishlist(productId);
+            updateWishlistCount();
+            loadWishlist();
+        }
+
+        function viewProduct(productId) {
+            window.location.href = `product.html?id=${productId}`;
+        }
+    </script>
+</body>
+</html>

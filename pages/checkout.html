@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - QuickSupply</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg) var(--spacing-md);
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--spacing-lg);
+        }
+
+        .checkout-form {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+        }
+
+        .form-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--spacing-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .delivery-options {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+
+        .delivery-option {
+            padding: var(--spacing-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .delivery-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .delivery-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .delivery-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .delivery-info {
+            flex: 1;
+        }
+
+        .delivery-name {
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .delivery-time {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .delivery-price {
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .promo-section {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .promo-input {
+            flex: 1;
+        }
+
+        .apply-promo-btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: var(--transition-fast);
+        }
+
+        .apply-promo-btn:hover {
+            opacity: 0.9;
+        }
+
+        .promo-message {
+            margin-top: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+
+        .promo-message.success {
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--success-color);
+        }
+
+        .promo-message.error {
+            background: rgba(239, 83, 80, 0.1);
+            color: var(--danger-color);
+        }
+
+        .order-summary {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .summary-item {
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .item-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .item-qty {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--success-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-sm) 0;
+            color: var(--text-secondary);
+        }
+
+        .summary-row.discount {
+            color: var(--success-color);
+        }
+
+        .summary-row.total {
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            margin-top: var(--spacing-sm);
+            padding-top: var(--spacing-md);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: var(--spacing-md);
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition-normal);
+        }
+
+        .place-order-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .place-order-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .payment-methods {
+            display: grid;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .payment-method {
+            padding: var(--spacing-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .payment-method:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .promo-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <p>Loading Checkout...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="menu-btn" id="menuBtn">☰</button>
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">QuickSupply</span>
+                </a>
+            </div>
+            <div class="nav-center">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for project kits, supplies, essentials...">
+                    <button class="search-btn" onclick="performSearch()">🔍</button>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="nav-icon" id="wishlistBtn" onclick="goToWishlist()">
+                    <span class="icon">❤️</span>
+                    <span class="badge" id="wishlistCount">0</span>
+                </button>
+                <button class="nav-icon" id="cartBtn" onclick="goToCart()">
+                    <span class="icon">🛒</span>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+                <button class="nav-icon" id="userBtn" onclick="toggleUserMenu()">
+                    <span class="icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Dropdown Menu -->
+    <div id="userMenu" class="user-menu hidden">
+        <div class="user-menu-content">
+            <div id="userInfo" class="user-info"></div>
+            <a href="orders.html" class="menu-item">📦 My Orders</a>
+            <a href="wishlist.html" class="menu-item">❤️ Wishlist</a>
+            <a href="#" onclick="handleAuth()" class="menu-item" id="authBtn">🔐 Login</a>
+        </div>
+    </div>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu">
+        <div class="side-menu-header">
+            <h3>Categories</h3>
+            <button class="close-btn" onclick="closeSideMenu()">✕</button>
+        </div>
+        <div class="side-menu-content">
+            <a href="category.html?cat=project-kits" class="menu-link">
+                <span class="menu-icon">🔧</span>
+                <span>Project Kits</span>
+            </a>
+            <a href="category.html?cat=project-items" class="menu-link">
+                <span class="menu-icon">🔩</span>
+                <span>Project Items</span>
+            </a>
+            <a href="category.html?cat=prints" class="menu-link">
+                <span class="menu-icon">🖨️</span>
+                <span>Printouts</span>
+            </a>
+            <a href="category.html?cat=essentials" class="menu-link">
+                <span class="menu-icon">🎒</span>
+                <span>Emergency Essentials</span>
+            </a>
+            <a href="category.html?cat=study" class="menu-link">
+                <span class="menu-icon">📚</span>
+                <span>Study Supplies</span>
+            </a>
+            <hr>
+            <a href="about.html" class="menu-link">
+                <span class="menu-icon">ℹ️</span>
+                <span>About Us</span>
+            </a>
+            <a href="contact.html" class="menu-link">
+                <span class="menu-icon">📞</span>
+                <span>Contact</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main style="min-height: 60vh;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-md);">
+            <h1 style="font-size: 2rem; margin-bottom: var(--spacing-md);">Checkout</h1>
+        </div>
+
+        <div class="checkout-container">
+            <div class="checkout-form">
+                <!-- Delivery Address -->
+                <div class="form-section">
+                    <h2>📍 Delivery Address</h2>
+                    <form id="addressForm">
+                        <div class="form-group">
+                            <label class="form-label" for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="address">Complete Address *</label>
+                            <input type="text" id="address" class="form-input" placeholder="House no., Building name" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="city">City *</label>
+                                <input type="text" id="city" class="form-input" placeholder="City" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pincode">Pincode *</label>
+                                <input type="text" id="pincode" class="form-input" placeholder="110001" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="landmark">Landmark (Optional)</label>
+                            <input type="text" id="landmark" class="form-input" placeholder="Near metro station">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Delivery Options -->
+                <div class="form-section">
+                    <h2>🚚 Delivery Options</h2>
+                    <div class="delivery-options">
+                        <div class="delivery-option selected" onclick="selectDelivery('express')">
+                            <input type="radio" name="delivery" value="express" checked>
+                            <div class="delivery-info">
+                                <div class="delivery-name">Express Delivery ⚡</div>
+                                <div class="delivery-time">Under 30 minutes</div>
+                            </div>
+                            <div class="delivery-price">FREE</div>
+                        </div>
+                        <div class="delivery-option" onclick="selectDelivery('standard')">
+                            <input type="radio" name="delivery" value="standard">
+                            <div class="delivery-info">
+                                <div class="delivery-name">Standard Delivery</div>
+                                <div class="delivery-time">1-2 hours</div>
+                            </div>
+                            <div class="delivery-price">FREE</div>
+                        </div>
+                        <div class="delivery-option" onclick="selectDelivery('scheduled')">
+                            <input type="radio" name="delivery" value="scheduled">
+                            <div class="delivery-info">
+                                <div class="delivery-name">Scheduled Delivery</div>
+                                <div class="delivery-time">Choose your time slot</div>
+                            </div>
+                            <div class="delivery-price">FREE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h2>💳 Payment Method</h2>
+                    <div class="payment-methods">
+                        <div class="payment-method selected" onclick="selectPayment('cod')">
+                            <input type="radio" name="payment" value="cod" checked>
+                            <div class="delivery-info">
+                                <div class="delivery-name">Cash on Delivery</div>
+                                <div class="delivery-time">Pay when you receive</div>
+                            </div>
+                        </div>
+                        <div class="payment-method" onclick="selectPayment('online')">
+                            <input type="radio" name="payment" value="online">
+                            <div class="delivery-info">
+                                <div class="delivery-name">Online Payment (UPI/Card)</div>
+                                <div class="delivery-time">Pay now and get extra 2% off</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Code -->
+                <div class="form-section">
+                    <h2>🎁 Apply Promo Code</h2>
+                    <div class="promo-section">
+                        <input type="text" id="promoCode" class="form-input promo-input" placeholder="Enter promo code">
+                        <button class="apply-promo-btn" onclick="applyPromo()">Apply</button>
+                    </div>
+                    <div id="promoMessage"></div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h2 style="margin-bottom: var(--spacing-md);">Order Summary</h2>
+                <div id="summaryItems"></div>
+                <div style="margin-top: var(--spacing-md);">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee</span>
+                        <span id="summaryDelivery">FREE</span>
+                    </div>
+                    <div class="summary-row discount" id="discountRow" style="display: none;">
+                        <span>Discount</span>
+                        <span id="summaryDiscount">-₹0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="summaryTotal">₹0.00</span>
+                    </div>
+                </div>
+                <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+                <div style="margin-top: var(--spacing-md); padding: var(--spacing-sm); background: rgba(102, 126, 234, 0.1); border-radius: var(--radius-sm); font-size: 0.9rem; color: var(--text-secondary); text-align: center;">
+                    🔒 Secure checkout • ⚡ Delivery in ${getDeliveryEstimate()}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickSupply</h3>
+                <p>Your one-stop shop for instant project supplies and study essentials delivery.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <a href="category.html?cat=project-kits">Project Kits</a>
+                <a href="category.html?cat=prints">Printouts</a>
+                <a href="category.html?cat=essentials">Essentials</a>
+                <a href="category.html?cat=study">Study Supplies</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>📧 support@quicksupply.com</p>
+                <p>📞 +91 98765 43210</p>
+                <p>⏰ 24/7 Support</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 QuickSupply. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="../index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="category.html?cat=all" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🔍</span>
+            <span class="bottom-nav-label">Browse</span>
+        </a>
+        <a href="cart.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Cart</span>
+            <span class="bottom-nav-badge" id="bottomCartCount">0</span>
+        </a>
+        <a href="orders.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">📦</span>
+            <span class="bottom-nav-label">Orders</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👤</span>
+            <span class="bottom-nav-label">Profile</span>
+        </a>
+    </div>
+
+    <script src="../scripts/data.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        let selectedDelivery = 'express';
+        let selectedPayment = 'cod';
+        let appliedDiscount = 0;
+        let promoApplied = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+
+            const cart = getCartItems();
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            updateCartCount();
+            updateWishlistCount();
+            updateUserInfo();
+            loadOrderSummary();
+            prefillUserData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const menuBtn = document.getElementById('menuBtn');
+            if (menuBtn) menuBtn.addEventListener('click', toggleSideMenu);
+
+            const userBtn = document.getElementById('userBtn');
+            if (userBtn) userBtn.addEventListener('click', toggleUserMenu);
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') performSearch();
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                const sideMenu = document.getElementById('sideMenu');
+                const userMenu = document.getElementById('userMenu');
+                const menuBtn = document.getElementById('menuBtn');
+                const userBtn = document.getElementById('userBtn');
+
+                if (sideMenu && !sideMenu.contains(e.target) && e.target !== menuBtn) {
+                    sideMenu.classList.remove('active');
+                }
+
+                if (userMenu && !userMenu.contains(e.target) && e.target !== userBtn) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+        }
+
+        function prefillUserData() {
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('fullName').value = user.name || '';
+                document.getElementById('phone').value = user.phone || '';
+                if (user.address) {
+                    document.getElementById('address').value = user.address.street || '';
+                    document.getElementById('city').value = user.address.city || '';
+                    document.getElementById('pincode').value = user.address.pincode || '';
+                    document.getElementById('landmark').value = user.address.landmark || '';
+                }
+            }
+        }
+
+        function loadOrderSummary() {
+            const cart = getCartItems();
+            const summaryItemsContainer = document.getElementById('summaryItems');
+            
+            summaryItemsContainer.innerHTML = cart.map(item => `
+                <div class="summary-item">
+                    <div class="item-image">${item.image}</div>
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-qty">Qty: ${item.quantity}</div>
+                    </div>
+                    <div class="item-price">${formatCurrency(item.price * item.quantity)}</div>
+                </div>
+            `).join('');
+
+            updatePriceSummary();
+        }
+
+        function updatePriceSummary() {
+            const subtotal = calculateCartTotal();
+            const deliveryFee = 0; // Always free
+            const total = subtotal - appliedDiscount + deliveryFee;
+
+            document.getElementById('summarySubtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('summaryDelivery').textContent = deliveryFee === 0 ? 'FREE' : formatCurrency(deliveryFee);
+            document.getElementById('summaryTotal').textContent = formatCurrency(total);
+
+            if (appliedDiscount > 0) {
+                document.getElementById('discountRow').style.display = 'flex';
+                document.getElementById('summaryDiscount').textContent = '-' + formatCurrency(appliedDiscount);
+            } else {
+                document.getElementById('discountRow').style.display = 'none';
+            }
+        }
+
+        function selectDelivery(type) {
+            selectedDelivery = type;
+            document.querySelectorAll('.delivery-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.delivery-option').classList.add('selected');
+        }
+
+        function selectPayment(type) {
+            selectedPayment = type;
+            document.querySelectorAll('.payment-method').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.payment-method').classList.add('selected');
+        }
+
+        function applyPromo() {
+            if (promoApplied) {
+                showNotification('Promo code already applied', 'error');
+                return;
+            }
+
+            const promoCode = document.getElementById('promoCode').value.trim();
+            const subtotal = calculateCartTotal();
+            const result = applyPromoCode(promoCode, subtotal);
+
+            const promoMessage = document.getElementById('promoMessage');
+            
+            if (result.success) {
+                appliedDiscount = result.discount;
+                promoApplied = true;
+                promoMessage.className = 'promo-message success';
+                promoMessage.textContent = result.message;
+                updatePriceSummary();
+                showNotification(result.message, 'success');
+            } else {
+                promoMessage.className = 'promo-message error';
+                promoMessage.textContent = result.message;
+                showNotification(result.message, 'error');
+            }
+        }
+
+        function placeOrder() {
+            const form = document.getElementById('addressForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const orderData = {
+                id: generateOrderId(),
+                items: getCartItems(),
+                address: {
+                    name: document.getElementById('fullName').value,
+                    phone: document.getElementById('phone').value,
+                    street: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    pincode: document.getElementById('pincode').value,
+                    landmark: document.getElementById('landmark').value
+                },
+                delivery: selectedDelivery,
+                payment: selectedPayment,
+                subtotal: calculateCartTotal(),
+                discount: appliedDiscount,
+                deliveryFee: 0,
+                total: calculateCartTotal() - appliedDiscount,
+                status: 'pending',
+                date: new Date().toISOString(),
+                estimatedDelivery: getDeliveryEstimate()
+            };
+
+            saveOrder(orderData);
+            localStorage.removeItem('cart');
+            updateCartCount();
+
+            showNotification('Order placed successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = `order-confirmation.html?orderId=${orderData.id}`;
+            }, 1000);
+        }
+
+        function toggleSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            if (sideMenu) sideMenu.classList.toggle('active');
+        }
+
+        function closeSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            if (sideMenu) sideMenu.classList.remove('active');
+        }
+
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) userMenu.classList.toggle('hidden');
+        }
+
+        function goToCart() {
+            window.location.href = 'cart.html';
+        }
+
+        function goToWishlist() {
+            window.location.href = 'wishlist.html';
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+
+            const query = searchInput.value.trim();
+            if (query.length === 0) {
+                showNotification('Please enter a search term', 'error');
+                return;
+            }
+
+            window.location.href = `category.html?search=${encodeURIComponent(query)}`;
+        }
+
+        function handleAuth() {
+            const user = getCurrentUser();
+            if (user) {
+                logoutUser();
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

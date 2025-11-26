@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - QuickSupply</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .orders-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg) var(--spacing-md);
+        }
+
+        .page-header {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .empty-state h3 {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .empty-state .btn {
+            padding: var(--spacing-sm) var(--spacing-xl);
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition-normal);
+        }
+
+        .empty-state .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .order-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: var(--transition-normal);
+            border: 2px solid transparent;
+        }
+
+        .order-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .order-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .order-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 167, 38, 0.2);
+            color: var(--warning-color);
+        }
+
+        .status-processing {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--primary-color);
+        }
+
+        .status-delivered {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--success-color);
+        }
+
+        .status-cancelled {
+            background: rgba(239, 83, 80, 0.2);
+            color: var(--danger-color);
+        }
+
+        .order-items {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .order-item {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .item-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: var(--radius-sm);
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .item-quantity {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+        }
+
+        .order-total span {
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .order-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .order-btn {
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .order-header {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+
+            .order-footer {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: stretch;
+            }
+
+            .order-actions {
+                width: 100%;
+            }
+
+            .order-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <p>Loading Orders...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">QuickSupply</span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <button class="nav-icon" onclick="window.location.href='cart.html'">
+                    <span class="icon">🛒</span>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+                <button class="nav-icon" onclick="window.location.href='profile.html'">
+                    <span class="icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="orders-container">
+        <div class="page-header">
+            <h1 class="page-title">My Orders</h1>
+            <p class="page-subtitle">Track and manage your orders</p>
+        </div>
+
+        <div id="ordersContent"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickSupply</h3>
+                <p>Your one-stop shop for instant project supplies and study essentials delivery.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>📧 support@quicksupply.com</p>
+                <p>📞 +91 98765 43210</p>
+                <p>⏰ 24/7 Support</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 QuickSupply. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="../index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="category.html?cat=all" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🔍</span>
+            <span class="bottom-nav-label">Browse</span>
+        </a>
+        <a href="cart.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Cart</span>
+            <span class="bottom-nav-badge" id="bottomCartCount">0</span>
+        </a>
+        <a href="orders.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">📦</span>
+            <span class="bottom-nav-label">Orders</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👤</span>
+            <span class="bottom-nav-label">Profile</span>
+        </a>
+    </div>
+
+    <script src="../scripts/data.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+
+            updateCartCount();
+            loadOrders();
+        });
+
+        function loadOrders() {
+            const orders = getOrders();
+            const container = document.getElementById('ordersContent');
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h3>No Orders Yet</h3>
+                        <p>Start shopping to place your first order</p>
+                        <a href="../index.html" class="btn">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const ordersHTML = orders.map(order => createOrderCard(order)).join('');
+            container.innerHTML = `<div class="orders-list">${ordersHTML}</div>`;
+        }
+
+        function createOrderCard(order) {
+            const statusClass = `status-${order.status.toLowerCase()}`;
+            const itemsHTML = order.items.map(item => `
+                <div class="order-item">
+                    <div class="item-icon">${item.image || '📦'}</div>
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">Qty: ${item.quantity}</div>
+                    </div>
+                    <div class="item-price">${formatCurrency(item.price * item.quantity)}</div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <h3>Order #${order.id}</h3>
+                            <div class="order-date">${formatDate(order.date)} • ${order.items.length} items</div>
+                        </div>
+                        <div class="order-status ${statusClass}">${order.status}</div>
+                    </div>
+                    <div class="order-items">
+                        ${itemsHTML}
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">
+                            Total: <span>${formatCurrency(order.total)}</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="order-btn btn-primary" onclick="viewOrderDetails('${order.id}')">
+                                View Details
+                            </button>
+                            ${order.status === 'Delivered' ? `
+                                <button class="order-btn btn-secondary" onclick="reorder('${order.id}')">
+                                    Reorder
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function viewOrderDetails(orderId) {
+            window.location.href = `order-confirmation.html?orderId=${orderId}`;
+        }
+
+        function reorder(orderId) {
+            const order = getOrderById(orderId);
+            if (!order) return;
+
+            order.items.forEach(item => {
+                addToCart(item.id);
+            });
+
+            showNotification('Items added to cart!', 'success');
+            setTimeout(() => {
+                window.location.href = 'cart.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
