@@ -1,5 +1,5 @@
 // ============================================
-// QUICKSUPPLY E-COMMERCE - UTILITY FUNCTIONS
+// Craft Catalyst E-COMMERCE - UTILITY FUNCTIONS
 // ============================================
 
 // ========== LOCAL STORAGE HELPERS ==========
