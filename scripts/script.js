@@ -1,5 +1,5 @@
 // ============================================
-// QUICKSUPPLY E-COMMERCE - MAIN SCRIPT
+// Craft Catalyst E-COMMERCE - MAIN SCRIPT
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -209,7 +209,10 @@ function createProductCard(product) {
                     onclick="event.stopPropagation(); toggleWishlist(${product.id}); this.classList.toggle('active')">
                 ❤️
             </button>
-            <div class="product-image">${product.image}</div>
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.name}">
+            </div>
+
             <div class="product-info">
                 <div class="product-title">${product.name}</div>
                 <div class="product-description">${product.description}</div>
