@@ -1,57 +1,50 @@
 // ============================================
-// QUICKSUPPLY E-COMMERCE - DATA MANAGEMENT
+// Craft Catalyst E-COMMERCE - DATA MANAGEMENT
 // ============================================
 
-// Initialize products data
 const productsData = [
-    // Project Kits
+
+    // kits
+    
     {
         id: 1,
-        name: "Arduino Starter Kit",
-        description: "Complete Arduino kit with board, sensors, and components",
-        price: 1299,
+        name: "Drone Starter Kit",
+        description: "Beginner drone-building kit with motors & controller",
+        price: 3999,
         category: "project-kits",
-        image: "🔧",
-        badge: "Popular"
+        image: "images/dronekit.jpeg",
+        badge: "Trending"
     },
     {
         id: 2,
-        name: "Raspberry Pi 4 Kit",
-        description: "Raspberry Pi 4 with accessories and power supply",
-        price: 4499,
+        name: "Solar Energy Kit",
+        description: "Build working solar-powered projects",
+        price: 499,
         category: "project-kits",
-        image: "🖥️",
-        badge: "Hot"
+        image: "images/solar-energy-kit.jpeg"
     },
     {
         id: 3,
-        name: "IoT Smart Home Kit",
-        description: "Build your own smart home automation system",
-        price: 2499,
+        name: "Hydraulic Lift Kit",
+        description: "DIY hydraulic lift model using syringes & pipes",
+        price: 399,
         category: "project-kits",
-        image: "🏠"
+        image: "images/hydraulic-kit.jpeg"
     },
     {
         id: 4,
-        name: "Robotics Starter Kit",
-        description: "Everything needed to build your first robot",
-        price: 3299,
+        name: "Bridge Model Kit",
+        description: "Craft stick kit to build strong model bridges",
+        price: 199,
         category: "project-kits",
-        image: "🤖",
-        badge: "New"
+        image: "images/bridge-kit.jpeg"
     },
 
-    // Project Items
+
+    // PROJECT ITEMS 
+
     {
-        id: 5,
-        name: "Breadboard Set",
-        description: "Pack of 3 breadboards with jumper wires",
-        price: 199,
-        category: "project-items",
-        image: "📋"
-    },
-    {
-        id: 6,
+        id: 12,
         name: "LED Assortment Pack",
         description: "100 LEDs in various colors",
         price: 149,
@@ -59,25 +52,74 @@ const productsData = [
         image: "💡"
     },
     {
-        id: 7,
+        id: 13,
         name: "Resistor Kit",
-        description: "500+ resistors in common values",
-        price: 249,
+        description: "300+ resistors in 30 different values",
+        price: 599,
         category: "project-items",
         image: "⚡"
     },
     {
-        id: 8,
+        id: 14,
         name: "Sensor Module Set",
         description: "10 different sensor modules for projects",
         price: 599,
         category: "project-items",
         image: "📡"
     },
-
-    // Printouts
     {
-        id: 9,
+        id: 15,
+        name: "Mini Motor Pack",
+        description: "Pack of 5 high-speed DC motors",
+        price: 149,
+        category: "project-items",
+        image: "⚙️"
+    },
+    {
+        id: 16,
+        name: "Jumper Wire Pack",
+        description: "40pcs male-to-male and female jump wires",
+        price: 79,
+        category: "project-items",
+        image: "🔌"
+    },
+    {
+        id: 17,
+        name: "Glue Gun + Sticks",
+        description: "Hot glue gun with 5 glue sticks",
+        price: 249,
+        category: "project-items",
+        image: "🔥",
+        badge: "Popular"
+    },
+    {
+        id: 18,
+        name: "Cardboard Sheets Pack",
+        description: "Set of 10 strong A4 cardboard sheets",
+        price: 99,
+        category: "project-items",
+        image: "📦"
+    },
+    {
+        id: 19,
+        name: "Thermocol Sheets",
+        description: "3 thick thermocol sheets for model making",
+        price: 89,
+        category: "project-items",
+        image: "🧊"
+    },
+    {
+        id: 20,
+        name: "Copper Wire Roll",
+        description: "10m copper wire for motor and science projects",
+        price: 59,
+        category: "project-items",
+        image: "🧵"
+    },
+
+    //  PRINTS
+    {
+        id: 21,
         name: "Black & White Prints",
         description: "High quality B&W printing per page",
         price: 2,
@@ -85,7 +127,7 @@ const productsData = [
         image: "🖨️"
     },
     {
-        id: 10,
+        id: 22,
         name: "Color Prints",
         description: "Premium color printing per page",
         price: 5,
@@ -93,7 +135,7 @@ const productsData = [
         image: "🎨"
     },
     {
-        id: 11,
+        id: 23,
         name: "Project Report Binding",
         description: "Professional spiral binding service",
         price: 50,
@@ -101,10 +143,66 @@ const productsData = [
         image: "📚",
         badge: "Popular"
     },
-
-    // Emergency Essentials
     {
-        id: 12,
+        id: 24,
+        name: "A3 Poster Printing",
+        description: "High-quality poster printing for school projects",
+        price: 25,
+        category: "prints",
+        image: "🖼️"
+    },
+    {
+        id: 25,
+        name: "Laminate Sheets",
+        description: "Glossy lamination per sheet",
+        price: 15,
+        category: "prints",
+        image: "📎"
+    },
+    {
+        id: 26,
+        name: "Certificate Printing",
+        description: "Premium certificate print with textured paper",
+        price: 30,
+        category: "prints",
+        image: "📜"
+    },
+    {
+        id: 27,
+        name: "Notebook Custom Cover",
+        description: "Print custom notebook covers",
+        price: 20,
+        category: "prints",
+        image: "📔"
+    },
+    {
+        id: 28,
+        name: "Chart Paper Prints",
+        description: "Printed A2/A3 project charts",
+        price: 20,
+        category: "prints",
+        image: "📄"
+    },
+    {
+        id: 29,
+        name: "File Folder Printing",
+        description: "Custom printed project folders",
+        price: 40,
+        category: "prints",
+        image: "🗂️"
+    },
+    {
+        id: 30,
+        name: "ID Card Printing",
+        description: "Instant printed ID cards",
+        price: 60,
+        category: "prints",
+        image: "🪪"
+    },
+
+    //   EMERGENCY ESSENTIALS
+    {
+        id: 31,
         name: "Emergency Stationery Kit",
         description: "Pen, pencil, eraser, ruler combo",
         price: 99,
@@ -113,15 +211,15 @@ const productsData = [
         badge: "Fast"
     },
     {
-        id: 13,
-        name: "Calculator Scientific",
+        id: 32,
+        name: "Scientific Calculator",
         description: "Casio FX-991EX scientific calculator",
         price: 899,
         category: "essentials",
         image: "🔢"
     },
     {
-        id: 14,
+        id: 33,
         name: "USB Flash Drive 32GB",
         description: "High-speed USB 3.0 flash drive",
         price: 399,
@@ -129,7 +227,7 @@ const productsData = [
         image: "💾"
     },
     {
-        id: 15,
+        id: 34,
         name: "Emergency Charger",
         description: "Universal phone charger with cable",
         price: 299,
@@ -137,10 +235,58 @@ const productsData = [
         image: "🔌",
         badge: "Hot"
     },
-
-    // Study Supplies
     {
-        id: 16,
+        id: 35,
+        name: "Portable Power Bank",
+        description: "10000mAh compact power bank",
+        price: 899,
+        category: "essentials",
+        image: "🔋"
+    },
+    {
+        id: 36,
+        name: "Emergency Umbrella",
+        description: "Compact foldable umbrella",
+        price: 249,
+        category: "essentials",
+        image: "☔"
+    },
+    {
+        id: 37,
+        name: "First Aid Mini Kit",
+        description: "Bandages, antiseptic wipes, cotton, tape",
+        price: 149,
+        category: "essentials",
+        image: "🩹"
+    },
+    {
+        id: 38,
+        name: "Water Bottle 500ml",
+        description: "Cold water for hot days & emergencies",
+        price: 20,
+        category: "essentials",
+        image: "🥤"
+    },
+    {
+        id: 39,
+        name: "Mask & Sanitizer Combo",
+        description: "1 sanitizer + 2 masks",
+        price: 49,
+        category: "essentials",
+        image: "🧴"
+    },
+    {
+        id: 40,
+        name: "Energy Chocolate Bar",
+        description: "Instant energy boost snack",
+        price: 30,
+        category: "essentials",
+        image: "🍫"
+    },
+
+    // 41–50 STUDY SUPPLIES 
+    {
+        id: 41,
         name: "Notebook Pack (5)",
         description: "Set of 5 ruled notebooks",
         price: 199,
@@ -148,7 +294,7 @@ const productsData = [
         image: "📓"
     },
     {
-        id: 17,
+        id: 42,
         name: "Pen Set Premium",
         description: "Pack of 10 ballpoint pens",
         price: 149,
@@ -156,7 +302,7 @@ const productsData = [
         image: "🖊️"
     },
     {
-        id: 18,
+        id: 43,
         name: "Highlighter Set",
         description: "6 fluorescent highlighter markers",
         price: 99,
@@ -164,7 +310,7 @@ const productsData = [
         image: "🖍️"
     },
     {
-        id: 19,
+        id: 44,
         name: "Sticky Notes Pack",
         description: "Colorful sticky notes - 6 pads",
         price: 79,
@@ -172,19 +318,58 @@ const productsData = [
         image: "📝"
     },
     {
-        id: 20,
+        id: 45,
         name: "Graph Paper Book",
-        description: "100 sheets graph paper notebook",
+        description: "100 sheets graph notebook",
         price: 89,
         category: "study",
         image: "📐"
+    },
+    {
+        id: 46,
+        name: "A4 Sheets Pack (100)",
+        description: "High-quality A4 printing sheets",
+        price: 149,
+        category: "study",
+        image: "📄"
+    },
+    {
+        id: 47,
+        name: "Eraser Pack (4)",
+        description: "Smooth, dust-free erasers",
+        price: 39,
+        category: "study",
+        image: "🧽"
+    },
+    {
+        id: 48,
+        name: "Sharpener Metal",
+        description: "Durable metal blade sharpener",
+        price: 29,
+        category: "study",
+        image: "🔪"
+    },
+    {
+        id: 49,
+        name: "Geometry Box Premium",
+        description: "Compass, divider, protractor & ruler",
+        price: 159,
+        category: "study",
+        image: "📏"
+    },
+    {
+        id: 50,
+        name: "Sticky Flags Set",
+        description: "Colorful bookmarks for notes",
+        price: 49,
+        category: "study",
+        image: "🏷️"
     }
 ];
 
-// Store products in localStorage on first load
-if (!localStorage.getItem('products')) {
-    localStorage.setItem('products', JSON.stringify(productsData));
-}
+
+
+localStorage.setItem('products', JSON.stringify(productsData));
 
 // Configuration
 const config = {
